@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pivo Bot Сайт</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #1e1e2f;
+      color: #f1f1f1;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #2b2b3c;
+      padding: 0.5rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    /* Бургер */
+    #menu-toggle {
+      display: none;
+    }
+
+    .menu-icon {
+      display: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #f1f1f1;
+    }
+
+    nav {
+      display: flex;
+      gap: 1rem;
+    }
+
+    nav a {
+      color: #f1f1f1;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    nav a:hover {
+      color: #4ea8de;
+    }
+
+    /* 📱 Адаптація */
+    @media (max-width: 768px) {
+      .menu-icon {
+        display: block;
+      }
+
+      nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: #2b2b3c;
+        flex-direction: column;
+        display: none;
+        text-align: center;
+        padding: 1rem 0;
+      }
+
+      #menu-toggle:checked + .menu-icon + nav {
+        display: flex;
+      }
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 5rem auto 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .section {
+      background-color: #2b2b3c;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    h1, h2 {
+      color: #ffffff;
+    }
+
+    iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .member {
+      background-color: #3a3a4d;
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 500;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+      transition: transform 0.2s ease;
+    }
+
+    .member:hover {
+      transform: scale(1.05);
+      background-color: #4ea8de;
+      color: #fff;
+    }
+.member summary {
+  cursor: pointer;
+  font-weight: 600;
+  background-color: #3a3a4d;
+  padding: 1rem;
+  border-radius: 10px;
+  list-style: none;
+  text-align: center;
+  transition: background 0.3s, color 0.3s;
+}
+
+.member[open] summary {
+  background-color: #4ea8de;
+  color: #fff;
+}
+
+.panel {
+  margin-top: 0.8rem;
+  background-color: #2b2b3c; /* такий самий, як загальний фон */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* тонка світла рамка */
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  color: #e0e0e0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  font-size: 0.9rem;
+}
+.rules-button {
+  padding: 0.4rem 0.8rem;
+  background-color: #3a3a4d;
+  color: #f1f1f1;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.3s ease, color 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rules-button:hover {
+  background-color: #4ea8de;
+  color: #ffffff;
+}
+.results-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.results-list {
+  flex: 2;
+  list-style: none;
+  padding-left: 1rem;
+  line-height: 1.6;
+}
+
+.side-panel {
+  flex: 1;
+  background-color: #3a3a4d;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.side-panel h3 {
+  margin-top: 0.5rem;
+  color: #4ea8de;
+}
+
+.side-panel blockquote {
+  margin: 0.5rem 0;
+  padding-left: 1rem;
+  border-left: 3px solid #4ea8de;
+  color: #ccc;
+  font-style: italic;
+}
+
+
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+  <h1>Pivo Bot</h1>
+  <<a href="#rules" class="rules-button">Правила</a>
+  <a href="#top" class="rules-button" style="margin: 0 auto;">На головну</a>
+</div>
+
+
+    <!-- Чекбокс для керування меню -->
+    <input type="checkbox" id="menu-toggle" />
+    <label for="menu-toggle" class="menu-icon">☰</label>
+
+    <nav>
+      <a href="#results">Результати</a>
+      <a href="#complaints">Жалоби</a>
+      <a href="#admins">Адміни</a>
+      <a href="#members">Учасники</a>
+      <a href="#faq">FAQ</a>
+   </nav>
+  </header>
+
+  <div class="container">
+<section class="section" id="results">
+  <h2 style="text-align: center;">Результати тижня</h2>
+  <div class="results-wrapper">
+    <ul class="results-list">
+      <li>1. ПОЛЯ</li>
+      <li>2. DENNIS</li>
+      <li>3. РОСТИК</li>
+      <li>4. MOOOWIKSS</li>
+      <li>5. САШУЛЯ</li>
+      <li>6. #moriarti?nubaya</li>
+      <li>7. - MX-</li>
+      <li>8. apostrophe..</li>
+      <li>9. ОЛЕСЯ</li>
+      <li>10. СИМПАТІЮЛЬКА</li>
+      <li>11. KCIO</li>
+      <li>12. ELISSXMI</li>
+      <li>13. KIM NABI</li>
+      <li>14. ОЛЯЯ</li>
+      <li>15. АНЯ )(</li>
+      <li>16. VALERIA</li>
+      <li>17. НАТУСИК</li>
+      <li>18. ANASTASIA</li>
+      <li>19. АНЯ</li>
+      <li>20. MARIANA</li>
+      <li>21. DRAKK444</li>
+      <li>22. MARICHKA</li>
+      <li>23. SOFIKA</li>
+      <li>24. HH</li>
+      <li>25. ТВОЙ КОТ</li>
+    </ul>
+
+    <div class="side-panel">
+      <h3>🔥 Факт тижня</h3>
+      <p><strong>ПОЛЯ</strong> тримає топ-1 вже 3 тижні поспіль!</p>
+
+      <h3>💡 Цитата тижня</h3>
+      <blockquote>«Пий красиво або не пий зовсім.» — Anastasia</blockquote>
+
+      <h3>🍺 Рекорд</h3>
+      <p>ELISSXMI випив(ла) +4.9л за день!</p>
+    </div>
+  </div>
+</section>
+
+
+    <section class="section" id="complaints">
+      <h2>Форма скарг</h2>
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSePyEJOVeCYZae-clCddRXGEIMwA5AnpZjhgbncyMpmNFR1Cg/viewform?usp=dialog">Завантаження…</iframe>
+    </section>
+
+    <section class="section" id="admins">
+      <h2>Пропозиція на адміна</h2>
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeu-YZ53qVX16-kPOqFLnECs-S8_nZyMklsUBqWZYeLT8q1VQ/viewform?usp=dialog">Завантаження…</iframe>
+    </section>
+
+   
+     <section class="section" id="members">
+  <h2>Учасники групи</h2>
+  <div class="members-grid">
+    <details class="member"><summary>Dennis</summary><div class="panel">«Я не п’ю багато — просто частіше за інших! 🍻»</div></details>
+    <details class="member"><summary>apostrophe. ✧🍇</summary><div class="panel">«Моя пунктуація краще за твоє життя.»</div></details>
+    <details class="member"><summary>drakk444</summary><div class="panel">«Тінь, код і пиво — моє тріо успіху.»</div></details>
+    <details class="member"><summary>оляя</summary><div class="panel">«Якщо не знаєш, що робити — просто сядь біля мене.»</div></details>
+    <details class="member"><summary>твой кот</summary><div class="panel">«Мяу. А тепер налий.»</div></details>
+    <details class="member"><summary>Anastasia</summary><div class="panel">«Пий красиво або не пий зовсім.»</div></details>
+    <details class="member"><summary>поля ÷</summary><div class="panel">«Я поділюся пивом. Але не настроєм.»</div></details>
+    <details class="member"><summary>Mariana</summary><div class="panel">«У кожної баночки — своя історія.»</div></details>
+    <details class="member"><summary>Аня🦋</summary><div class="panel">«Легкість у словах, вага у пляшках.»</div></details>
+    <details class="member"><summary>нн</summary><div class="panel">«Хто я? Дізнаєшся, коли доп’ємо.»</div></details>
+    <details class="member"><summary>-_mx_-</summary><div class="panel">«Символи в ніку — символи мого хаосу.»</div></details>
+    <details class="member"><summary>Ксю💋</summary><div class="panel">«Може, ще по одній? Ну так, для настрою 💋»</div></details>
+    <details class="member"><summary>Marichka🤍</summary><div class="panel">«Я біла як пінка на свіжому лагері.»</div></details>
+    <details class="member"><summary>elissxmi 🌸</summary><div class="panel">«Ніжна зовні — бурна всередині (і пляшка теж).»</div></details>
+    <details class="member"><summary>Олеся ✮</summary><div class="panel">«Зірка вечора й ранкового похмілля.»</div></details>
+    <details class="member"><summary>#в👓</summary><div class="panel">«Знаю, як правильно ставити хештеги й наливати пиво.»</div></details>
+    <details class="member"><summary>J. Acosta</summary><div class="panel">«No beer, no comment.»</div></details>
+    <details class="member"><summary>mooowikss</summary><div class="panel">«Мууу... я за крафтове!»</div></details>
+    <details class="member"><summary>сашуля 🌸</summary><div class="panel">«Коли п’ю — розцвітаю 🌸»</div></details>
+    <details class="member"><summary>Ростик</summary><div class="panel">«Кажу “не буду” — але тільки до першого келиха.»</div></details>
+    <details class="member"><summary>VALERIA</summary><div class="panel">«У кожній пляшці — частинка моєї харизми.»</div></details>
+    <details class="member"><summary>симпатЮлька ∞</summary><div class="panel">«Нескінченна симпатія до хмелю.»</div></details>
+    <details class="member"><summary>аня</summary><div class="panel">«Проста, як вода. Але з градусом.»</div></details>
+    <details class="member"><summary>sofika</summary><div class="panel">«Софіка тут — а значить, буде весело!»</div></details>
+    <details class="member"><summary>натусик💋</summary><div class="panel">«Цілую, наливаю, чарую 💋»</div></details>
+  </div>
+</section>
+    <section class="section" id="faq">
+  <h2>Часті запитання (FAQ)</h2>
+  <ul>
+    <li><strong>Що таке Pivo Bot?</strong> — Це бот, який створений для розваг, разом пити пиво  у Telegram та змагатися хто зможе випити більше.</li>
+    <li><strong>Як подати скаргу?</strong> — Перейдіть у розділ <a href="#complaints" style="color: #4ea8de;">Жалоби</a> і заповніть форму.</li>
+    <li><strong>Хто може стати адміном?</strong> — Подати заявку може будь-хто через <a href="#admins" style="color: #4ea8de;">цей розділ</a>.</li>
+  </ul>
+</section>
+
+<section class="section" id="rules">
+  <details>
+    <summary style="cursor:pointer; font-weight:bold;">📜 Правила</summary>
+    <div class="panel" style="margin-top:1rem;">
+      <h3>Правила групи:</h3>
+      <ul>
+        <li>1.1 Ссылки (кроме TikTok) — мут 15 хв</li>
+        <li>1.2 Рецидив ссылок — мут 30 хв</li>
+        <li>1.3 Флуд / спам — мут 60 хв</li>
+        <li>1.4 Наполегливі образи — мут 90 хв</li>
+        <li>1.5 Гіфки, стікери про порно / насильство — мут 120 хв</li>
+      </ul>
+
+      <h3>Правила гри:</h3>
+      <ul>
+        <li>Щоб випити — пиши <code>/drink</code></li>
+        <li>Раз на день. У шлунок падає від -3.5л до +5л 🍻</li>
+        <li>У чаті — ті, хто "сосали"</li>
+      </ul>
+
+      <h3>Бонуси за рейтинг:</h3>
+      <ul>
+        <li>Оцінюється щотижня (понеділок–неділя)</li>
+        <li><strong>1 місце:</strong> свій префікс, рофл-префікс, мутити (×5), знімати мут (×3), змінити аву, +2л бонус</li>
+        <li><strong>2 місце:</strong> рофл-префікс, мутити (×5), знімати мут (×3), аву, +2л</li>
+        <li><strong>3 місце:</strong> аву, +2л</li>
+      </ul>
+
+      <h3>Для лузера (остання позиція):</h3>
+      <ul>
+        <li>Обов’язково: префікс у чаті (наприклад: "лох") — вибирає чат</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<section class="section" id="secret">
+  <details>
+    <summary style="cursor:pointer; font-weight:bold;">🕵️‍♂️ Секретна зона (тільки для своїх)</summary>
+    <div class="panel" style="margin-top:1rem;">
+      Адміни хочуть пива, скиньте деньгу на карту пажешка🍻
+    </div>
+  </details>
+</section>
+
+<section class="section" id="liters">
+  <details>
+    <summary style="cursor:pointer; font-weight:bold;">🍺 Поточна кількість літрів в учасника</summary>
+    <div class="panel" style="margin-top:1rem;">
+      <ul>
+        <li><strong>Ця панель ще в розробці... </strong> 
+    </div>
+  </details>
+</section>
+
+
+  </div>
+</body>
+</html>
+x
